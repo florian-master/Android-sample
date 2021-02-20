@@ -1,115 +1,131 @@
 package com.example.sandbox;
 
-import android.app.DownloadManager;
 import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
+import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+public class MainActivity extends WearableActivity implements Communication {
 
-public class MainActivity extends WearableActivity {
+    private static final String TAG = "MainActivity";
+    private static final String KEY_FRAGMENT = "fragment_save";
 
-    TextView textView;
-    final String baseURL = "https://prevision-meteo.ch/services/json/bordeaux";
+    private long time;
+    private Toast toast;
+
+    private static String mFragment;
+    private final SplashScreen splashScreen = new SplashScreen();
+    private final MainMenu mainMenu =new MainMenu();
+    private final PilotScreen pilotScreen = new PilotScreen();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        textView = findViewById(R.id.textView);
-        Button buttonView = findViewById(R.id.button);
-        buttonView.setOnClickListener(callApi);
-
-        JoystickView joystickView1 = findViewById(R.id.joystick1);
-        JoystickView joystickView2 = findViewById(R.id.joystick2);
-
-        joystickView1.setListener((JoystickView joystick, float percentX, float percentY) -> {
-                Log.i("joystick1 xPos", ":"+percentX);
-                Log.i("joystick1 yPos", ":"+percentY);
-        });
-
-        joystickView2.setListener((JoystickView joystick, float percentX, float percentY) -> {
-                Log.i("joystick2 xPos", ":"+percentX);
-                Log.i("joystick2 yPos", ":"+percentY);
-        });
-
         // Enables Always-on
         setAmbientEnabled();
+        Log.d(TAG, "onCreate: Started.");
+
+        if(savedInstanceState != null)
+            mFragment = savedInstanceState.getString(KEY_FRAGMENT);
+        else
+            mFragment = getIntent().getStringExtra(KEY_FRAGMENT);
+
+        if (mFragment != null) {
+            if(mFragment.equals(((Object) splashScreen).getClass().getSimpleName()))
+                showFragment(this.splashScreen);
+            else if(mFragment.equals(((Object) mainMenu).getClass().getSimpleName()))
+                showFragment(this.mainMenu);
+            else if(mFragment.equals(((Object) pilotScreen).getClass().getSimpleName()))
+                showFragment(this.pilotScreen);
+        } else
+            showFragment(this.splashScreen);
+
+
     }
 
-    private View.OnClickListener callApi = new View.OnClickListener() {
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putString(KEY_FRAGMENT, mFragment != null ? mFragment: "");
+        super.onSaveInstanceState(outState);
+    }
 
-        @Override
-        public void onClick(View v) {
-            RequestQueue req = Volley.newRequestQueue(getApplicationContext());
-            JsonObjectRequest objectRequest = new JsonObjectRequest(
-                    Request.Method.GET,
-                    baseURL,
-                    null,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            textView.setText("SUCCESS");
-                            try {
-                                Log.i("response", response.get("city_info").toString());
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            textView.setText("FAILURE");
-                            Log.e("respErr", error.toString());
-                        }
-                    }
-            );
-            req.add(objectRequest);
+    private void showFragment(final Fragment fragment) {
+        if (fragment == null)
+            return;
+
+        // Update current fragment
+        mFragment = ((Object) fragment).getClass().getSimpleName();
+        // Begin a fragment transaction
+        final FragmentManager fm = new FragmentActivity().getSupportFragmentManager();
+        final FragmentTransaction ft = fm.beginTransaction();
+        // animate the changing fragment
+        // Replace current fragment by a new one
+        ft.replace(R.id.container, fragment);
+        ft.addToBackStack(null);
+        //commit changes
+        ft.commit();
+    }
+
+    public void goToMainMenu(){
+        showFragment(this.mainMenu);
+    }
+
+    public void goToPilotScreen(){
+        showFragment(this.pilotScreen);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Log.i(TAG, "BACK PRESSED");
+
+        if(time+2000 > System.currentTimeMillis()){
+            toast.cancel();
+            Log.i(TAG, "Quit");
+            finish();
+            return;
+        } else {
+            toast = Toast.makeText(getApplicationContext(),"Press 2 times to exit completely the App!",
+                    Toast.LENGTH_LONG);
+            toast.show();
         }
-    };
+
+        time = System.currentTimeMillis();
+    }
 
     @Override
     protected void onStart() {
-        Log.d("MainActivity.java", "onStart()");
+        Log.i(TAG, "onStart()");
         super.onStart();
     }
 
     @Override
     protected void onResume() {
-        Log.d("MainActivity.java", "onResume()");
+        Log.i(TAG, "onResume()");
         super.onResume();
     }
 
     @Override
     protected void onPause() {
-        Log.d("MainActivity.java", "onPause()");
+        Log.i(TAG, "onPause()");
         super.onPause();
     }
 
     @Override
     protected void onStop() {
-        Log.d("MainActivity.java", "onStop()");
+        Log.i(TAG, "onStop()");
         super.onStop();
     }
 
     @Override
     protected void onDestroy() {
-        Log.d("MainActivity.java", "onDestroy()");
+        Log.i(TAG, "onDestroy()");
         super.onDestroy();
     }
 }
