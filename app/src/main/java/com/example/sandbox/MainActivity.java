@@ -1,14 +1,12 @@
 package com.example.sandbox;
 
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
 import android.widget.Toast;
 
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 public class MainActivity extends WearableActivity implements Communication {
 
@@ -63,8 +61,8 @@ public class MainActivity extends WearableActivity implements Communication {
         // Update current fragment
         mFragment = ((Object) fragment).getClass().getSimpleName();
         // Begin a fragment transaction
-        final FragmentManager fm = new FragmentActivity().getSupportFragmentManager();
-        final FragmentTransaction ft = fm.beginTransaction();
+//        final FragmentManager fm = new FragmentActivity().getSupportFragmentManager();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
         // animate the changing fragment
         // Replace current fragment by a new one
         ft.replace(R.id.container, fragment);

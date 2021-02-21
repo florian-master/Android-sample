@@ -1,10 +1,10 @@
 package com.example.sandbox;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 
-import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 
 public class SplashScreen extends Fragment {
 
-    private static int SPLASH_TIME = 1000;
+    private static int SPLASH_TIME = 2000;
     private Communication communicationInterface;
 
     public SplashScreen() {
