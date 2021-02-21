@@ -84,14 +84,14 @@ public class MainActivity extends WearableActivity implements Communication {
         Log.i(TAG, "BACK PRESSED");
 
         if(time+2000 > System.currentTimeMillis()){
-            toast.cancel();
+            toast = Toast.makeText(getApplicationContext(),"GoodBye!",
+                    Toast.LENGTH_SHORT);
+            toast.show();
             Log.i(TAG, "Quit");
             finish();
             return;
         } else {
-            toast = Toast.makeText(getApplicationContext(),"Press 2 times to exit completely the App!",
-                    Toast.LENGTH_LONG);
-            toast.show();
+            goToMainMenu();
         }
 
         time = System.currentTimeMillis();
