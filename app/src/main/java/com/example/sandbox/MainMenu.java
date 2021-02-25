@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 public class MainMenu extends Fragment {
     TextView pilot_screen;
+    TextView location_screen;
     private Communication communicationInterface;
 
     public MainMenu() {
@@ -22,6 +23,9 @@ public class MainMenu extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.main_menu, container, false);
+        location_screen = rootView.findViewById(R.id.location_screen);
+        location_screen.setOnClickListener(show_location_screen);
+
         pilot_screen = rootView.findViewById(R.id.pilot_screen);
         pilot_screen.setOnClickListener(show_pilot_screen);
         return rootView;
@@ -32,6 +36,14 @@ public class MainMenu extends Fragment {
         @Override
         public void onClick(View v) {
             communicationInterface.goToPilotScreen();
+        }
+    };
+
+    private View.OnClickListener show_location_screen = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+            communicationInterface.goToLocationScreen();
         }
     };
 

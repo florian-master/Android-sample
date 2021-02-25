@@ -8,15 +8,17 @@
     tools:context=".MainMenu">
 
     <TextView
-        android:id="@+id/menuTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/screen_title"
+        android:layout_width="214dp"
+        android:layout_height="24dp"
+        android:background="#009688"
         android:text="Menu"
+        android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.082" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <ScrollView
         android:layout_width="156dp"
@@ -25,7 +27,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/menuTitle"
+        app:layout_constraintTop_toBottomOf="@+id/screen_title"
         app:layout_constraintVertical_bias="0.692">
 
         <LinearLayout
@@ -40,10 +42,10 @@
                 android:text="Pilot Screen" />
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/location_screen"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="TextView" />
+                android:text="Location Screen" />
 
             <TextView
                 android:id="@+id/textView4"

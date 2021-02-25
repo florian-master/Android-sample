@@ -18,8 +18,9 @@ public class MainActivity extends WearableActivity implements Communication {
 
     private static String mFragment;
     private final SplashScreen splashScreen = new SplashScreen();
-    private final MainMenu mainMenu =new MainMenu();
+    private final MainMenu mainMenu = new MainMenu();
     private final PilotScreen pilotScreen = new PilotScreen();
+    private final LocationScreen locationScreen = new LocationScreen();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,7 @@ public class MainActivity extends WearableActivity implements Communication {
         else
             mFragment = getIntent().getStringExtra(KEY_FRAGMENT);
 
+        // Case of app resume
         if (mFragment != null) {
             if(mFragment.equals(((Object) splashScreen).getClass().getSimpleName()))
                 showFragment(this.splashScreen);
@@ -42,10 +44,10 @@ public class MainActivity extends WearableActivity implements Communication {
                 showFragment(this.mainMenu);
             else if(mFragment.equals(((Object) pilotScreen).getClass().getSimpleName()))
                 showFragment(this.pilotScreen);
+            else if(mFragment.equals(((Object) locationScreen).getClass().getSimpleName()))
+                showFragment(this.locationScreen);
         } else
             showFragment(this.splashScreen);
-
-
     }
 
     @Override
@@ -71,13 +73,16 @@ public class MainActivity extends WearableActivity implements Communication {
         ft.commit();
     }
 
+    @Override
     public void goToMainMenu(){
         showFragment(this.mainMenu);
     }
 
-    public void goToPilotScreen(){
-        showFragment(this.pilotScreen);
-    }
+    @Override
+    public void goToPilotScreen(){ showFragment(this.pilotScreen); }
+
+    @Override
+    public void goToLocationScreen() { showFragment(this.locationScreen); }
 
     @Override
     public void onBackPressed() {
