@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.graphics.PointF;
 import android.location.Location;
 import android.os.Bundle;
 
@@ -29,10 +30,15 @@ import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 
+import java.util.ArrayList;
+
 public class LocationScreen extends Fragment {
     private TextView lng;
     private TextView lat;
+    private ArrayList<PointF> itinerary = new ArrayList<>();
+
     private LocationRequest request;
+    private final int DELAY = 2000;
     private final int REQUEST_CODE = 8990;
     private LocationCallback locationCallback;
     private FusedLocationProviderClient fusedLocationProviderClient;
@@ -53,8 +59,8 @@ public class LocationScreen extends Fragment {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
 
         request = new LocationRequest()
-                .setFastestInterval(300)
-                .setInterval(300)
+                .setFastestInterval(DELAY)
+                .setInterval(DELAY)
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder().addLocationRequest(request);
@@ -87,6 +93,10 @@ public class LocationScreen extends Fragment {
                 for (Location location : locationResult.getLocations()) {
                     lng.setText(String.valueOf(location.getLongitude()));
                     lat.setText(String.valueOf(location.getLatitude()));
+
+                    PointF p = new PointF((float) location.getLatitude(), (float)location.getLongitude());
+                    itinerary.add(p);
+                    Log.e("itinerary size", String.valueOf(itinerary.size()));
                 }
             }
         };
